@@ -60,12 +60,12 @@
       text-align: center;
     }
 
-    .footer .brand     { color: #3b82f6; font-weight: 600; }
+    .footer .brand      { color: #3b82f6; font-weight: 600; }
     .footer .brand span { color: #dc2626; }
 
     .not-found {
       text-align: center;
-      margin-top: 4rem;
+      padding: 4rem 1rem;
       color: #475569;
     }
 
@@ -92,24 +92,33 @@
       return new URLSearchParams(window.location.search).get(name);
     }
 
-    function streamableEmbed(url) {
-      const match = url.match(/streamable\.com\/(?:e\/)?([a-zA-Z0-9]+)/);
+    function getYouTubeEmbed(url) {
+      // Handles:
+      // https://www.youtube.com/watch?v=XXXX
+      // https://youtu.be/XXXX
+      // https://youtube.com/shorts/XXXX
+      var match =
+        url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/) ||
+        url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/) ||
+        url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
       if (!match) return null;
-      return 'https://streamable.com/e/' + match[1];
+      return 'https://www.youtube.com/embed/' + match[1] + '?rel=0&modestbranding=1';
     }
 
     async function load() {
-      const user = getParam('user');
-      const entryId = getParam('entry');
+      var user    = getParam('user');
+      var entryId = getParam('entry');
 
-      const res = await fetch('data.json');
-      const data = await res.json();
+      var res  = await fetch('data.json');
+      var data = await res.json();
 
-      const meta = document.getElementById('meta');
-      const wrap = document.getElementById('video-wrap');
+      var meta = document.getElementById('meta');
+      var wrap = document.getElementById('video-wrap');
 
-      const found = user
-        ? data.users.find(u => u.username.toLowerCase() === user.toLowerCase())
+      var found = user
+        ? data.users.find(function(u) {
+            return u.username.toLowerCase() === user.toLowerCase();
+          })
         : null;
 
       if (!found) {
@@ -118,8 +127,8 @@
         return;
       }
 
-      const entry = entryId
-        ? found.entries.find(e => String(e.id) === String(entryId))
+      var entry = entryId
+        ? found.entries.find(function(e) { return String(e.id) === String(entryId); })
         : found.entries[0];
 
       if (!entry) {
@@ -130,11 +139,12 @@
 
       meta.innerHTML = 'User: <b>' + found.username + '</b> &nbsp;|&nbsp; Uploaded: <b>' + entry.date + '</b>';
 
-      const embedUrl = streamableEmbed(entry.videoUrl);
+      var embedUrl = getYouTubeEmbed(entry.videoUrl);
+
       if (embedUrl) {
-        wrap.innerHTML = '<iframe src="' + embedUrl + '" allowfullscreen></iframe>';
+        wrap.innerHTML = '<iframe src="' + embedUrl + '" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>';
       } else {
-        wrap.innerHTML = '<div class="not-found"><p>Invalid video URL.</p></div>';
+        wrap.innerHTML = '<div class="not-found"><p>Invalid video URL. Make sure it\'s a YouTube link.</p></div>';
       }
     }
 
