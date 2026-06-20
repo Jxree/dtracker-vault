@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[d]Tracker Vault</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #e2e8f0;
+      padding: 2.5rem 1rem 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .bracket-l { color: #2563eb; font-size: 32px; font-weight: 300; line-height: 1; }
+    .bracket-r { color: #dc2626; font-size: 32px; font-weight: 300; line-height: 1; }
+    .logo-d     { color: #fff; font-size: 24px; font-weight: 800; }
+    .logo-vault { color: #fff; font-size: 28px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; }
+
+    .meta {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .meta b { color: #3b82f6; font-weight: 500; }
+
+    .video-wrap {
+      width: 100%;
+      max-width: 780px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .video-wrap iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+    }
+
+    .footer {
+      margin-top: 1.25rem;
+      font-size: 13px;
+      color: #4a4a4a;
+      text-align: center;
+    }
+
+    .footer .brand     { color: #3b82f6; font-weight: 600; }
+    .footer .brand span { color: #dc2626; }
+
+    .not-found {
+      text-align: center;
+      margin-top: 4rem;
+      color: #475569;
+    }
+
+    .not-found h2 { color: #ef4444; font-size: 1.4rem; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <span class="bracket-l">[</span>
+    <span class="logo-d">d</span>
+    <span class="bracket-r">]</span>
+    <span class="logo-vault">Vault</span>
+  </div>
+
+  <div class="meta" id="meta">Loading...</div>
+
+  <div class="video-wrap" id="video-wrap"></div>
+
+  <div class="footer">Powered by <span class="brand">[d]<span>Tracker</span></span></div>
+
+  <script>
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function streamableEmbed(url) {
+      const match = url.match(/streamable\.com\/(?:e\/)?([a-zA-Z0-9]+)/);
+      if (!match) return null;
+      return 'https://streamable.com/e/' + match[1];
+    }
+
+    async function load() {
+      const user = getParam('user');
+      const entryId = getParam('entry');
+
+      const res = await fetch('data.json');
+      const data = await res.json();
+
+      const meta = document.getElementById('meta');
+      const wrap = document.getElementById('video-wrap');
+
+      const found = user
+        ? data.users.find(u => u.username.toLowerCase() === user.toLowerCase())
+        : null;
+
+      if (!found) {
+        meta.textContent = '';
+        wrap.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records for "' + (user || '?') + '"</p></div>';
+        return;
+      }
+
+      const entry = entryId
+        ? found.entries.find(e => String(e.id) === String(entryId))
+        : found.entries[0];
+
+      if (!entry) {
+        meta.textContent = '';
+        wrap.innerHTML = '<div class="not-found"><h2>Entry not found</h2></div>';
+        return;
+      }
+
+      meta.innerHTML = 'User: <b>' + found.username + '</b> &nbsp;|&nbsp; Uploaded: <b>' + entry.date + '</b>';
+
+      const embedUrl = streamableEmbed(entry.videoUrl);
+      if (embedUrl) {
+        wrap.innerHTML = '<iframe src="' + embedUrl + '" allowfullscreen></iframe>';
+      } else {
+        wrap.innerHTML = '<div class="not-found"><p>Invalid video URL.</p></div>';
+      }
+    }
+
+    load();
+  </script>
+
+</body>
+</html>

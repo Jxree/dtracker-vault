@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "username": "gard1bas",
+      "displayName": "gard1bas",
+      "userId": "584857626",
+      "avatarUrl": "",
+      "alts": ["tobicrime", "Avaitron"],
+      "banned": false,
+      "created": "04/24/2018",
+      "cheatOwnership": "Isabelle",
+      "entries": [
+        {
+          "id": 1,
+          "date": "2025-06-15 21:23:50",
+          "reason": "Aimbot",
+          "reportedBy": "tobw",
+          "videoUrl": "https://streamable.com/e/REPLACE_WITH_YOUR_ID"
+        },
+        {
+          "id": 2,
+          "date": "2025-06-15 21:23:50",
+          "reason": "Aimbot",
+          "reportedBy": "tobw",
+          "videoUrl": "https://streamable.com/e/REPLACE_WITH_YOUR_ID"
+        }
+      ]
+    }
+  ]
+}
