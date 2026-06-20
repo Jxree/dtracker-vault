@@ -1,21 +1,21 @@
 {
   "users": [
     {
-      "username": "gard1bas",
-      "displayName": "gard1bas",
-      "userId": "584857626",
-      "avatarUrl": "",
-      "alts": ["tobicrime", "Avaitron"],
+      "username": "lightzsii",
+      "displayName": "lightzsii",
+      "userId": "649813528",
+      "avatarUrl": "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-C20211AACDF46AA5CA7913B2F8CAD54B-Png/150/150/AvatarHeadshot/Webp/noFilter",
+      "alts": ["tobicrime", "tupu"],
       "banned": false,
       "created": "04/24/2018",
       "cheatOwnership": "Isabelle",
       "entries": [
         {
           "id": 1,
-          "date": "2025-06-15 21:23:50",
+          "date": "2026-06-19 21:10:50",
           "reason": "Aimbot",
           "reportedBy": "tobw",
-          "videoUrl": "https://www.youtube.com/watch?v=REEMPLAZA_CON_TU_VIDEO"
+          "videoUrl": "https://youtu.be/JFB2v7kNIag"
         }
       ]
     }
