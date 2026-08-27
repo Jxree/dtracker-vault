@@ -1,7 +1,5 @@
 {
-  "functions": {
-    "api/roblox.js": {
-      "runtime": "edge"
-    }
-  }
+  "rewrites": [
+    { "source": "/api/roblox", "destination": "/api/roblox.js" }
+  ]
 }
