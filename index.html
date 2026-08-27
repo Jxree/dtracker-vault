@@ -7,38 +7,167 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video-js.min.css" rel="stylesheet" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: #0a0a0a;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   font-family: 'Segoe UI', system-ui, sans-serif;
   color: #e2e8f0;
-  padding: 2.5rem 1rem 1.5rem;
+  padding: 2rem 1rem 3rem;
 }
+
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.bracket-l { color: #2563eb; font-size: 32px; font-weight: 300; line-height: 1; }
-.bracket-r { color: #dc2626; font-size: 32px; font-weight: 300; line-height: 1; }
-.logo-d { color: #fff; font-size: 24px; font-weight: 800; }
-.logo-vault { color: #fff; font-size: 28px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; }
-.meta {
-  font-size: 13px;
-  color: #64748b;
+  justify-content: center;
+  gap: 6px;
   margin-bottom: 1.5rem;
 }
-.meta b { color: #3b82f6; font-weight: 500; }
-.video-wrap {
-  width: 100%;
-  max-width: 780px;
-  background: #000;
-  border-radius: 8px;
+.bl { color: #2563eb; font-size: 30px; font-weight: 300; line-height: 1; }
+.br { color: #dc2626; font-size: 30px; font-weight: 300; line-height: 1; }
+.logo-d { color: #fff; font-size: 22px; font-weight: 800; }
+.logo-vault { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: 1px; margin-left: 6px; }
+
+.user-card {
+  background: #111;
+  border: 1px solid #1e2a3a;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  position: relative;
   overflow: hidden;
+}
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #dc2626);
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #1e2a3a;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.avatar-fallback {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #1e2a3a;
+  flex-shrink: 0;
+}
+.user-name { color: #fff; font-size: 18px; font-weight: 700; margin: 0 0 3px; }
+.user-alts { color: #64748b; font-size: 12px; margin: 0; }
+
+.user-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  font-size: 11px;
+  color: #475569;
+  border-top: 1px solid #1e2a3a;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+.user-meta span b { color: #94a3b8; font-weight: 500; display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px; }
+.user-meta span { display: flex; flex-direction: column; }
+
+.badge-banned {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.badge-banned.yes { background: #2d1010; color: #ef4444; border: 1px solid #7f1d1d; }
+.badge-banned.no  { background: #0f2918; color: #22c55e; border: 1px solid #166534; }
+
+.cheat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #1a1200;
+  color: #eab308;
+  border: 1px solid #713f12;
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.cheat-badge b { color: #fde047; }
+
+.entries-label {
+  color: #475569;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.entry {
+  background: #111;
+  border: 1px solid #1e2a3a;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.entry-header:hover { background: #161f2e; }
+
+.entry-num { color: #3b82f6; font-size: 13px; font-weight: 600; }
+
+.entry-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.entry-date { color: #475569; font-size: 11px; }
+
+.reason-badge {
+  background: #2d1010;
+  color: #ef4444;
+  border: 1px solid #7f1d1d;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 11px;
+}
+
+.chevron { color: #475569; font-size: 12px; }
+
+.entry-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+.entry-body.open { max-height: 600px; }
+
+.video-wrap {
+  background: #000;
+  width: 100%;
 }
 .video-wrap iframe {
   display: block;
@@ -51,32 +180,49 @@ body {
   aspect-ratio: 16/9;
   height: auto;
 }
-.footer {
-  margin-top: 1.25rem;
-  font-size: 13px;
-  color: #4a4a4a;
-  text-align: center;
+
+.entry-footer {
+  padding: 7px 14px;
+  background: #0d0d0d;
+  font-size: 11px;
+  color: #475569;
+  border-top: 1px solid #1e2a3a;
 }
-.footer .brand { color: #3b82f6; font-weight: 600; }
-.footer .brand span { color: #dc2626; }
+.entry-footer b { color: #64748b; }
+
 .not-found {
   text-align: center;
-  padding: 4rem 1rem;
+  padding: 5rem 1rem;
   color: #475569;
 }
 .not-found h2 { color: #ef4444; font-size: 1.4rem; margin-bottom: 0.5rem; }
+
+.page-footer {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 12px;
+  color: #4a4a4a;
+}
+.page-footer .brand { color: #3b82f6; font-weight: 600; }
+.page-footer .brand span { color: #dc2626; }
 </style>
 </head>
 <body>
-<div class="logo">
-  <span class="bracket-l">[</span>
-  <span class="logo-d">d</span>
-  <span class="bracket-r">]</span>
-  <span class="logo-vault">Vault</span>
+<div class="container">
+  <div class="logo">
+    <span class="bl">[</span>
+    <span class="logo-d">d</span>
+    <span class="br">]</span>
+    <span class="logo-vault">Vault</span>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="page-footer">
+    Powered by <span class="brand">[d]<span>Tracker</span></span>
+  </div>
 </div>
-<div class="meta" id="meta">Loading...</div>
-<div class="video-wrap" id="video-wrap"></div>
-<div class="footer">Powered by <span class="brand">[d]<span>Tracker</span></span></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video.min.js"></script>
 <script>
 function getParam(name) {
@@ -88,64 +234,135 @@ function getYouTubeEmbed(url) {
     url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/) ||
     url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/) ||
     url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
-  if (!match) return null;
-  return 'https://www.youtube.com/embed/' + match[1] + '?rel=0&modestbranding=1';
+  return match ? 'https://www.youtube.com/embed/' + match[1] + '?rel=0&modestbranding=1' : null;
 }
 
 function isDirectVideo(url) {
   return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
 }
 
+var openEntry = null;
+var vjsPlayers = {};
+
+function toggleEntry(idx, videoUrl) {
+  var body = document.getElementById('body-' + idx);
+  var chevron = document.getElementById('ch-' + idx);
+
+  if (openEntry !== null && openEntry !== idx) {
+    var prevBody = document.getElementById('body-' + openEntry);
+    var prevCh = document.getElementById('ch-' + openEntry);
+    if (prevBody) prevBody.classList.remove('open');
+    if (prevCh) prevCh.textContent = '▸';
+    if (vjsPlayers[openEntry]) {
+      try { vjsPlayers[openEntry].pause(); } catch(e) {}
+    }
+  }
+
+  var isOpen = body.classList.contains('open');
+
+  if (isOpen) {
+    body.classList.remove('open');
+    chevron.textContent = '▸';
+    if (vjsPlayers[idx]) {
+      try { vjsPlayers[idx].pause(); } catch(e) {}
+    }
+    openEntry = null;
+  } else {
+    body.classList.add('open');
+    chevron.textContent = '▾';
+    openEntry = idx;
+
+    var wrap = document.getElementById('vwrap-' + idx);
+    if (wrap && !wrap.dataset.loaded) {
+      wrap.dataset.loaded = '1';
+      var embedUrl = getYouTubeEmbed(videoUrl);
+      if (embedUrl) {
+        wrap.innerHTML = '<iframe src="' + embedUrl + '" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>';
+      } else if (isDirectVideo(videoUrl)) {
+        var vid = document.createElement('video');
+        vid.id = 'vjs-' + idx;
+        vid.className = 'video-js vjs-big-play-centered';
+        vid.setAttribute('controls', '');
+        vid.setAttribute('preload', 'auto');
+        vid.setAttribute('controlsList', 'nodownload');
+        wrap.appendChild(vid);
+        var player = videojs('vjs-' + idx, {
+          fluid: true,
+          playbackRates: [0.5, 1, 1.5, 2]
+        });
+        player.src({ type: 'video/mp4', src: videoUrl });
+        vjsPlayers[idx] = player;
+      } else {
+        wrap.innerHTML = '<div style="padding:2rem;text-align:center;color:#475569;font-size:13px;">Invalid video URL</div>';
+      }
+    }
+  }
+}
+
 async function load() {
+  var content = document.getElementById('content');
   var user = getParam('user');
-  var entryId = getParam('entry');
+
   var res = await fetch('data.json');
   var data = await res.json();
 
-  var meta = document.getElementById('meta');
-  var wrap = document.getElementById('video-wrap');
-
   var found = user
-    ? data.users.find(function(u) {
-        return u.username.toLowerCase() === user.toLowerCase();
-      })
+    ? data.users.find(function(u) { return u.username.toLowerCase() === user.toLowerCase(); })
     : null;
 
   if (!found) {
-    meta.textContent = '';
-    wrap.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records for "' + (user || '?') + '"</p></div>';
+    content.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records found for "' + (user || '?') + '"</p></div>';
     return;
   }
 
-  var entry = entryId
-    ? found.entries.find(function(e) { return String(e.id) === String(entryId); })
-    : found.entries[0];
+  var bannedClass = found.banned ? 'yes' : 'no';
+  var bannedText = found.banned ? 'Yes' : 'No';
 
-  if (!entry) {
-    meta.textContent = '';
-    wrap.innerHTML = '<div class="not-found"><h2>Entry not found</h2></div>';
-    return;
-  }
+  var altsText = found.alts && found.alts.length
+    ? 'Alts: ' + found.alts.join(', ')
+    : '';
 
-  meta.innerHTML = 'User: <b>' + found.username + '</b> &nbsp;|&nbsp; Uploaded: <b>' + entry.date + '</b>';
+  var avatarEl = found.avatarUrl
+    ? '<img class="avatar" src="' + found.avatarUrl + '" alt="avatar" onerror="this.style.display=\'none\'">'
+    : '<div class="avatar-fallback"></div>';
 
-  var videoUrl = entry.videoUrl;
-  var embedUrl = getYouTubeEmbed(videoUrl);
+  var cheatEl = found.cheatOwnership
+    ? '<div class="cheat-badge">&#9651; Cheat ownership: <b>' + found.cheatOwnership + '</b></div>'
+    : '';
 
-  if (embedUrl) {
-    wrap.innerHTML = '<iframe src="' + embedUrl + '" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>';
-  } else if (isDirectVideo(videoUrl)) {
-    wrap.innerHTML = '<video id="vault-player" class="video-js vjs-big-play-centered" controls preload="auto" controlsList="nodownload"></video>';
-    videojs('vault-player', {
-      fluid: true,
-      controlBar: {
-        playbackRateMenuButton: true
-      },
-      playbackRates: [0.5, 1, 1.5, 2]
-    }).src({ type: 'video/mp4', src: videoUrl });
-  } else {
-    wrap.innerHTML = '<div class="not-found"><p>Invalid video URL.</p></div>';
-  }
+  var html = '<div class="user-card">'
+    + '<div class="user-header">'
+    + avatarEl
+    + '<div><p class="user-name">' + found.displayName + '</p>'
+    + (altsText ? '<p class="user-alts">' + altsText + '</p>' : '')
+    + '</div></div>'
+    + '<div class="user-meta">'
+    + '<span><b>User ID</b>' + found.userId + '</span>'
+    + '<span><b>Display Name</b>' + found.displayName + '</span>'
+    + '<span><b>Created</b>' + found.created + '</span>'
+    + '<span><b>Banned</b><span class="badge-banned ' + bannedClass + '">' + bannedText + '</span></span>'
+    + '</div>'
+    + cheatEl
+    + '</div>';
+
+  html += '<div class="entries-label">ENTRIES (' + found.entries.length + ')</div>';
+
+  found.entries.forEach(function(entry) {
+    html += '<div class="entry">'
+      + '<div class="entry-header" onclick="toggleEntry(' + entry.id + ', \'' + entry.videoUrl + '\')">'
+      + '<span class="entry-num">Entry #' + entry.id + '</span>'
+      + '<div class="entry-right">'
+      + '<span class="entry-date">' + entry.date + '</span>'
+      + '<span class="reason-badge">' + entry.reason + '</span>'
+      + '<span class="chevron" id="ch-' + entry.id + '">▸</span>'
+      + '</div></div>'
+      + '<div class="entry-body" id="body-' + entry.id + '">'
+      + '<div class="video-wrap" id="vwrap-' + entry.id + '"></div>'
+      + '<div class="entry-footer">Reported by <b>' + entry.reportedBy + '</b> · [d]Tracker</div>'
+      + '</div></div>';
+  });
+
+  content.innerHTML = html;
 }
 
 load();
