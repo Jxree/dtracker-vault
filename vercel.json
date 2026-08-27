@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/roblox.js": {
+      "runtime": "edge"
+    }
+  }
+}
