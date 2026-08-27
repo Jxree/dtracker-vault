@@ -9,17 +9,6 @@
       "banned": false,
       "created": "04/24/2018",
       "cheatOwnership": "Isabelle",
-      "entries": []
-    },
-    {
-      "username": "monttom",
-      "displayName": "monttom",
-      "userId": "584857626",
-      "avatarUrl": "https://tr.rbxcdn.com/...",
-      "alts": ["alt1", "alt2"],
-      "banned": false,
-      "created": "01/01/2020",
-      "cheatOwnership": "Matcha",
       "entries": [
         {
           "id": 1,
@@ -27,6 +16,19 @@
           "reason": "Aimbot",
           "reportedBy": "tobw",
           "videoUrl": "https://res.cloudinary.com/soaf4r4v/video/upload/Roblox_2026-07-16_13-28-01.mp4"
+        },
+    {
+      "username": "monttom",
+      "displayName": "monttom",
+      "userId": "584857626",
+      "avatarUrl": "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-C49B7496D33C10D2BD23E0DB5E51FD6A-Png/150/150/AvatarHeadshot/Webp/noFilter",
+      "alts": ["alt1", "alt2"],
+      "banned": false,
+      "created": "01/01/2020",
+      "cheatOwnership": "Matcha",
+      "entries": [
+        {
+         
         }
       ]
     }
