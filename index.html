@@ -299,21 +299,26 @@ function toggleEntry(idx, videoUrl) {
   }
 }
 
-async function load() {
-  var content = document.getElementById('content');
-  var user = getParam('user');
-
-  var res = await fetch('data.json');
-  var data = await res.json();
-
-  var found = user
-    ? data.users.find(function(u) { return u.username.toLowerCase() === user.toLowerCase(); })
-    : null;
-
-  if (!found) {
-    content.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records found for "' + (user || '?') + '"</p></div>';
-    return;
+async function fetchRobloxData(userId) {
+  try {
+    var userRes = await fetch('https://users.roblox.com/v1/users/' + userId);
+    var userData = await userRes.json();
+    var avatarRes = await fetch('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' + userId + '&size=150x150&format=Png&isCircular=false');
+    var avatarData = await avatarRes.json();
+    return {
+      displayName: userData.displayName || userData.name || null,
+      username: userData.name || null,
+      avatarUrl: avatarData.data && avatarData.data[0] ? avatarData.data[0].imageUrl : null
+    };
+  } catch(e) {
+    return null;
   }
+}
+
+function renderProfile(found, roblox) {
+  var displayName = (roblox && roblox.displayName) ? roblox.displayName : found.displayName;
+  var username = (roblox && roblox.username) ? roblox.username : found.username;
+  var avatarUrl = (roblox && roblox.avatarUrl) ? roblox.avatarUrl : found.avatarUrl;
 
   var bannedClass = found.banned ? 'yes' : 'no';
   var bannedText = found.banned ? 'Yes' : 'No';
@@ -322,8 +327,8 @@ async function load() {
     ? 'Alts: ' + found.alts.join(', ')
     : '';
 
-  var avatarEl = found.avatarUrl
-    ? '<img class="avatar" src="' + found.avatarUrl + '" alt="avatar" onerror="this.style.display=\'none\'">'
+  var avatarEl = avatarUrl
+    ? '<img class="avatar" src="' + avatarUrl + '" alt="avatar" onerror="this.style.display=\'none\'">'
     : '<div class="avatar-fallback"></div>';
 
   var cheatEl = found.cheatOwnership
@@ -333,12 +338,12 @@ async function load() {
   var html = '<div class="user-card">'
     + '<div class="user-header">'
     + avatarEl
-    + '<div><p class="user-name">' + found.displayName + '</p>'
+    + '<div><p class="user-name">' + displayName + '</p>'
     + (altsText ? '<p class="user-alts">' + altsText + '</p>' : '')
     + '</div></div>'
     + '<div class="user-meta">'
     + '<span><b>User ID</b>' + found.userId + '</span>'
-    + '<span><b>Display Name</b>' + found.displayName + '</span>'
+    + '<span><b>Username</b>' + username + '</span>'
     + '<span><b>Created</b>' + found.created + '</span>'
     + '<span><b>Banned</b><span class="badge-banned ' + bannedClass + '">' + bannedText + '</span></span>'
     + '</div>'
@@ -362,7 +367,31 @@ async function load() {
       + '</div></div>';
   });
 
-  content.innerHTML = html;
+  document.getElementById('content').innerHTML = html;
+}
+
+async function load() {
+  var content = document.getElementById('content');
+  var user = getParam('user');
+
+  var res = await fetch('data.json');
+  var data = await res.json();
+
+  var found = user
+    ? data.users.find(function(u) { return u.username.toLowerCase() === user.toLowerCase(); })
+    : null;
+
+  if (!found) {
+    content.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records found for "' + (user || '?') + '"</p></div>';
+    return;
+  }
+
+  renderProfile(found, null);
+
+  if (found.userId) {
+    var roblox = await fetchRobloxData(found.userId);
+    if (roblox) renderProfile(found, roblox);
+  }
 }
 
 load();
