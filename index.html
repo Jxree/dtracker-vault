@@ -301,15 +301,9 @@ function toggleEntry(idx, videoUrl) {
 
 async function fetchRobloxData(userId) {
   try {
-    var userRes = await fetch('https://users.roblox.com/v1/users/' + userId);
-    var userData = await userRes.json();
-    var avatarRes = await fetch('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' + userId + '&size=150x150&format=Png&isCircular=false');
-    var avatarData = await avatarRes.json();
-    return {
-      displayName: userData.displayName || userData.name || null,
-      username: userData.name || null,
-      avatarUrl: avatarData.data && avatarData.data[0] ? avatarData.data[0].imageUrl : null
-    };
+    var res = await fetch('/api/roblox?userId=' + userId);
+    if (!res.ok) return null;
+    return await res.json();
   } catch(e) {
     return null;
   }
