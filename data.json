@@ -4,7 +4,7 @@
       "username": "prahzsii",
       "displayName": "prahzsii",
       "userId": "649813528",
-      "avatarUrl": "https://tr.rbxcdn.com/...",
+      "avatarUrl": "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-C20211AACDF46AA5CA7913B2F8CAD54B-Png/150/150/AvatarHeadshot/Webp/noFilter",
       "alts": ["tobicrime", "tupu"],
       "banned": false,
       "created": "04/24/2018",
@@ -16,7 +16,9 @@
           "reason": "Aimbot",
           "reportedBy": "tobw",
           "videoUrl": "https://res.cloudinary.com/soaf4r4v/video/upload/Roblox_2026-07-16_13-28-01.mp4"
-        },
+        }
+      ]
+    },
     {
       "username": "monttom",
       "displayName": "monttom",
@@ -26,11 +28,7 @@
       "banned": false,
       "created": "01/01/2020",
       "cheatOwnership": "Matcha",
-      "entries": [
-        {
-         
-        }
-      ]
+      "entries": []
     }
   ]
 }
