@@ -364,21 +364,57 @@ function renderProfile(found, roblox) {
   document.getElementById('content').innerHTML = html;
 }
 
+var SUPABASE_URL = 'https://aipgdxntxgyixconiehx.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_Aun1kSkUnbAgmT3fSNACVg_m0uxSvHi';
+
+async function sbFetch(path) {
+  var res = await fetch(SUPABASE_URL + path, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY
+    }
+  });
+  return res.json();
+}
+
 async function load() {
   var content = document.getElementById('content');
   var user = getParam('user');
 
-  var res = await fetch('data.json');
-  var data = await res.json();
-
-  var found = user
-    ? data.users.find(function(u) { return u.username.toLowerCase() === user.toLowerCase(); })
-    : null;
-
-  if (!found) {
-    content.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records found for "' + (user || '?') + '"</p></div>';
+  if (!user) {
+    content.innerHTML = '<div class="not-found"><h2>No user specified</h2><p>Add ?user=username to the URL</p></div>';
     return;
   }
+
+  var userData = await sbFetch('/rest/v1/users?username=eq.' + encodeURIComponent(user.toLowerCase()) + '&limit=1');
+
+  if (!userData || userData.length === 0) {
+    content.innerHTML = '<div class="not-found"><h2>User not found</h2><p>No records found for "' + user + '"</p></div>';
+    return;
+  }
+
+  var u = userData[0];
+  var entriesData = await sbFetch('/rest/v1/entries?user_fk=eq.' + u.id + '&order=id.asc');
+
+  var found = {
+    username: u.username,
+    displayName: u.display_name,
+    userId: u.user_id,
+    avatarUrl: u.avatar_url,
+    alts: u.alts || [],
+    banned: u.banned,
+    created: u.created,
+    cheatOwnership: u.cheat_ownership,
+    entries: (entriesData || []).map(function(e, i) {
+      return {
+        id: e.id,
+        date: e.date,
+        reason: e.reason,
+        reportedBy: e.reported_by,
+        videoUrl: e.video_url
+      };
+    })
+  };
 
   renderProfile(found, null);
 
