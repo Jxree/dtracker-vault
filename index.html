@@ -346,10 +346,10 @@ function renderProfile(found, roblox) {
 
   html += '<div class="entries-label">ENTRIES (' + found.entries.length + ')</div>';
 
-  found.entries.forEach(function(entry) {
+  found.entries.forEach(function(entry, index) {
     html += '<div class="entry">'
       + '<div class="entry-header" onclick="toggleEntry(' + entry.id + ', \'' + entry.videoUrl + '\')">'
-      + '<span class="entry-num">Entry #' + entry.id + '</span>'
+      + '<span class="entry-num">Entry #' + (index + 1) + '</span>'
       + '<div class="entry-right">'
       + '<span class="entry-date">' + entry.date + '</span>'
       + '<span class="reason-badge">' + entry.reason + '</span>'
